@@ -3,29 +3,62 @@
 # This script is run on travis for the install stage of mac builds.
 #
 
-# our expectation is that install-qt creates $QTDIR, $QTDIR/bin.
 CACHEDIR=${HOME}/Cache
+mkdir -p ${CACHEDIR}
 
-#if [ -f "${CACHEDIR}/timestamp" ]; then
-#  echo "Using cached Qt."
-#  echo "If you need to clear the cache see"
-#  echo "https://docs.travis-ci.com/user/caching/#Fetching-and-storing-caches."
-#  cat "${CACHEDIR}/timestamp"
-#else
-  sw_vers
-  xcodebuild -version
-  if [ ! -z "${SECRETVAR+x}" ] ; then
-    echo -n "SECRETVAR hash: "
-    echo -n "$SECRETVAR" | openssl dgst -sha512 | cut -d " " -f 2
+sw_vers
+xcodebuild -version
+
+version=5.12.7
+versionmm=$(echo ${version} | cut -d. -f1,2)
+
+if [ ! -f ${CACHEDIR}/stage ]; then
+  echo "stage0" > ${CACHEDIR}/stage
+fi
+
+stage=$(cat ${CACHEDIR}/stage)
+
+case $stage in
+
+  stage0)
+  mkdir -p ${CACHEDIR}/build/qt5-build
+  cd build
+  wget -nv https://download.qt.io/archive/qt/${versionmm}/${version}/single/qt-everywhere-src-${version}.tar.xz
+  tar -xJf qt-everywhere-src-${version}.tar.xz
+  excludes=( qtdatavis3d qtwebglplugin qtvirtualkeyboard qtcharts qtnetworkauth)
+  for component in ${excludes[@]}
+  do
+    /bin/rm -fr qt-everywhere-src-${version}/$component
+  done
+
+  cd qt5-build
+  ../qt-everywhere-src-${version}/configure --prefix=${CACHEDIR}/Qt/${version}/clang_64 -opensource -confirm-license -nomake examples -nomake tests -release
+  echo "stage1" > ${CACHDIR}/stage
+  ;;
+
+  stage1)
+  cd ${CACHEDIR}/build/qt5-build
+  status=0
+  gtimeout -s SIGTERM 50m make -j4 || status=$?
+  if [ $status -eq 0 ]; then
+    echo "stage2" > ${CACHDIR}/stage
+  elif [ $status -eq 124 ]; then
+    # timeout
+    echo "build timed out, repeat"
   else
-    echo no secrets available.
+    echo "make status unexpected, $status"
   fi
-  if [ -f ${CACHEDIR}/timestamp ]; then
-    echo "old cache found"
-    cat ${CACHEDIR}/timestamp
-  fi
-  rm -fr ${CACHEDIR}
-  mkdir -p ${CACHEDIR}
-  cd ${CACHEDIR}
-  date > timestamp
-#fi
+  ;;
+
+  stage2)
+  cd ${CACHEDIR}/build/qt5-build
+  make install
+  echo "stage 3" > ${CACHDIR}/stage
+  ;;
+
+  stage3)
+  echo "Build complete"
+  ${CACHEDIR}/Qt/${version}/clang_64/bin/qmake -query
+  ;;
+
+esac

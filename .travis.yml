@@ -10,6 +10,10 @@ matrix:
         directories:
           - $HOME/Cache
         timeout: 600
+      addons:
+        homebrew:
+          packages:
+            - coreutil
 
 install:
   - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then ./travis_install_osx; fi
