@@ -25,6 +25,7 @@ case $stage in
   cd ${CACHEDIR}/build
   wget -nv https://download.qt.io/archive/qt/${versionmm}/${version}/single/qt-everywhere-src-${version}.tar.xz
   tar -xJf qt-everywhere-src-${version}.tar.xz
+  /bin/rm qt-everywhere-src-${version}.tar.xz
   excludes=( qtdatavis3d qtwebglplugin qtvirtualkeyboard qtcharts qtnetworkauth)
   for component in ${excludes[@]}
   do
@@ -58,6 +59,7 @@ case $stage in
 
   stage3)
   echo "Build complete"
+  /bin/rm -fr ${CACHEDIR}/build
   ${CACHEDIR}/Qt/${version}/clang_64/bin/qmake -query
   ;;
 
