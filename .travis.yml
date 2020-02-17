@@ -13,3 +13,5 @@ matrix:
 install:
   - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then ./travis_install_osx; fi
 
+script:
+

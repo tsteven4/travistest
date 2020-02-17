@@ -12,6 +12,10 @@ CACHEDIR=${HOME}/Cache
 #  echo "https://docs.travis-ci.com/user/caching/#Fetching-and-storing-caches."
 #  cat "${CACHEDIR}/timestamp"
 #else
+  if [ -f ${CACHEDIR}/timestamp ]; then
+    echo "old cache found"
+    cat ${CACHEDIR}/timestamp
+  fi
   rm -fr ${CACHEDIR}
   mkdir -p ${CACHEDIR}
   cd ${CACHEDIR}
