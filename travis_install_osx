@@ -12,6 +12,12 @@ CACHEDIR=${HOME}/Cache
 #  echo "https://docs.travis-ci.com/user/caching/#Fetching-and-storing-caches."
 #  cat "${CACHEDIR}/timestamp"
 #else
+  if [ ! -z "${SECRETVAR+x}" ] ; then
+    echo -n "SECRETVAR hash: "
+    echo -n "$SECRETVAR" | openssl dgst -sha512 | cut -d " " -f 2
+  else
+    echo no secrets available.
+  fi
   if [ -f ${CACHEDIR}/timestamp ]; then
     echo "old cache found"
     cat ${CACHEDIR}/timestamp
