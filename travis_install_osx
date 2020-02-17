@@ -33,7 +33,7 @@ case $stage in
 
   cd ${CACHEDIR}/build/qt5-build
   ../qt-everywhere-src-${version}/configure --prefix=${CACHEDIR}/Qt/${version}/clang_64 -opensource -confirm-license -nomake examples -nomake tests -release
-  echo "stage1" > ${CACHDIR}/stage
+  echo "stage1" > ${CACHEDIR}/stage
   ;;
 
   stage1)
@@ -41,7 +41,7 @@ case $stage in
   status=0
   gtimeout -s SIGTERM 50m make -j4 || status=$?
   if [ $status -eq 0 ]; then
-    echo "stage2" > ${CACHDIR}/stage
+    echo "stage2" > ${CACHEDIR}/stage
   elif [ $status -eq 124 ]; then
     # timeout
     echo "build timed out, repeat"
@@ -53,7 +53,7 @@ case $stage in
   stage2)
   cd ${CACHEDIR}/build/qt5-build
   make install
-  echo "stage 3" > ${CACHDIR}/stage
+  echo "stage 3" > ${CACHEDIR}/stage
   ;;
 
   stage3)
