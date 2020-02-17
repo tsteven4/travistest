@@ -44,7 +44,7 @@ case $stage in
   # must not exceed travis log limit.
   # must not be quiet for too long.
   while sleep 60; do echo "=====[ $SECONDS seconds, still building... ]====="; done &
-  gtimeout -s SIGTERM 40m make -j4 1 >> build.log || status=$?
+  gtimeout -s SIGTERM 40m make -j4  1>>build.log || status=$?
   kill %1
   if [ $status -eq 0 ]; then
     echo "stage2" > ${CACHEDIR}/stage
