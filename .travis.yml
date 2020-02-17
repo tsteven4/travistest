@@ -13,7 +13,7 @@ matrix:
       addons:
         homebrew:
           packages:
-            - coreutil
+            - coreutils
 
 install:
   - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then ./travis_install_osx; fi

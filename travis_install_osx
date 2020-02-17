@@ -22,7 +22,7 @@ case $stage in
 
   stage0)
   mkdir -p ${CACHEDIR}/build/qt5-build
-  cd build
+  cd ${CACHEDIR}/build
   wget -nv https://download.qt.io/archive/qt/${versionmm}/${version}/single/qt-everywhere-src-${version}.tar.xz
   tar -xJf qt-everywhere-src-${version}.tar.xz
   excludes=( qtdatavis3d qtwebglplugin qtvirtualkeyboard qtcharts qtnetworkauth)
@@ -31,7 +31,7 @@ case $stage in
     /bin/rm -fr qt-everywhere-src-${version}/$component
   done
 
-  cd qt5-build
+  cd ${CACHEDIR}/build/qt5-build
   ../qt-everywhere-src-${version}/configure --prefix=${CACHEDIR}/Qt/${version}/clang_64 -opensource -confirm-license -nomake examples -nomake tests -release
   echo "stage1" > ${CACHDIR}/stage
   ;;
