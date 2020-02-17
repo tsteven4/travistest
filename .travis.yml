@@ -3,6 +3,7 @@ language: cpp
 matrix:
   include:
     - os: osx
+      osx_image: xcode11.3
       compiler: clang
       env: QT_VERSION="5.12.7"
       cache:

@@ -12,6 +12,8 @@ CACHEDIR=${HOME}/Cache
 #  echo "https://docs.travis-ci.com/user/caching/#Fetching-and-storing-caches."
 #  cat "${CACHEDIR}/timestamp"
 #else
+  sw_vers
+  xcodebuild -version
   if [ ! -z "${SECRETVAR+x}" ] ; then
     echo -n "SECRETVAR hash: "
     echo -n "$SECRETVAR" | openssl dgst -sha512 | cut -d " " -f 2
