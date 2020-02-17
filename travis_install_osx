@@ -43,7 +43,7 @@ case $stage in
   # must timeout and intercept status before travis times out at 50 minutes from job start.
   # must not exceed travis log limit.
   # must not be quiet for too long.
-  while sleep 1m; do echo "=====[ $SECONDS seconds, still building... ]====="; done &
+  while sleep 60; do echo "=====[ $SECONDS seconds, still building... ]====="; done &
   gtimeout -s SIGTERM 40m make -j4 1 >> build.log || status=$?
   kill %1
   if [ $status -eq 0 ]; then
