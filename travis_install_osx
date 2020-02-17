@@ -40,7 +40,10 @@ case $stage in
   stage1)
   cd ${CACHEDIR}/build/qt5-build
   status=0
-  gtimeout -s SIGTERM 50m make -j4 || status=$?
+  # must timeout and intercept status before travis times out
+  # must not exceed travis log limit.
+  # must not be quiet for too long.
+  gtimeout -s SIGTERM 50m make -j4 | sed 's/\(..........\).*/\1/' || status=$?
   if [ $status -eq 0 ]; then
     echo "stage2" > ${CACHEDIR}/stage
   elif [ $status -eq 124 ]; then
