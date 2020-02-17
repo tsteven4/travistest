@@ -1,0 +1,19 @@
+#!/bin/bash -ex
+#
+# This script is run on travis for the install stage of mac builds.
+#
+
+# our expectation is that install-qt creates $QTDIR, $QTDIR/bin.
+CACHEDIR=${HOME}/Cache
+
+#if [ -f "${CACHEDIR}/timestamp" ]; then
+#  echo "Using cached Qt."
+#  echo "If you need to clear the cache see"
+#  echo "https://docs.travis-ci.com/user/caching/#Fetching-and-storing-caches."
+#  cat "${CACHEDIR}/timestamp"
+#else
+  rm -fr ${CACHEDIR}
+  mkdir -p ${CACHEDIR}
+  cd ${CACHEDIR}
+  date > timestamp
+#fi

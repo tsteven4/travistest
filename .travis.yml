@@ -1,0 +1,15 @@
+language: cpp
+
+matrix:
+  include:
+    - os: osx
+      compiler: clang
+      env: QT_VERSION="5.12.7"
+      cache:
+        directories:
+          - $HOME/Cache
+        timeout: 600
+
+install:
+  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then ./travis_install_osx; fi
+
